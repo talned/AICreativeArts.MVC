@@ -1,2 +1,4 @@
 bin/
 obj/
+Data/app.db-shm
+Data/app.db-wal
