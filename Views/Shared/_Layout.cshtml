@@ -4,12 +4,17 @@
     <title>@ViewData["Title"] - Creative AI</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
 </head>
-<body>
-    <nav>
-        <a asp-controller="Home" asp-action="Index">Home</a>
-        <a asp-controller="Home" asp-action="Contact">Contact</a>
+<body class="bg-dark text-white">
+    <nav class="navbar navbar-expand-lg bg-black">
+        <div class="container ps-0 ms-3 align-items-center fw-bold">
+            <a class="navbar-brand text-white" asp-controller="Home" asp-action="Index">Creative AI</a>
+            <div class="navbar-nav me-auto ms-3">
+                <a class="nav-link text-white px-4 text-decoration-none btn btn-outline-dark border-0" asp-controller="Home" asp-action="Index">Home</a>
+                <a class="nav-link text-white px-4 text-decoration-none btn btn-outline-dark border-0" asp-controller="Home" asp-action="Contact">Contact</a>
+            </div>
+        </div>
     </nav>
-    <main> 
+    <main class="container mt-4"> 
         @RenderBody()
     </main>
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
