@@ -6,6 +6,7 @@ namespace mvc.Models {
         public required string Email { get; set; }
         public required string Password { get; set; }
         public int RoleId { get; set; }        // Foreign key
+        public bool IsEmailVerified { get; set; } = false;  // Add this
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         
