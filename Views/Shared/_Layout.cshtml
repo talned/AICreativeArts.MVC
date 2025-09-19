@@ -2,14 +2,16 @@
 <html>
 <head>
     <title>@ViewData["Title"] - Creative AI</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
 </head>
 <body>
     <nav>
         <a asp-controller="Home" asp-action="Index">Home</a>
         <a asp-controller="Home" asp-action="Contact">Contact</a>
     </nav>
-    
-    @RenderBody()
-    
+    <main> 
+        @RenderBody()
+    </main>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
 </body>
 </html>
