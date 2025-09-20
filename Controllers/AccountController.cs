@@ -23,9 +23,65 @@ namespace mvc.Controllers
             return View();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Login(string email, string password, bool rememberMe = false)
+        {
+            // Basic validation
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+            {
+                ViewBag.Error = "Email and password are required.";
+                return View();
+            }
+
+            // Find user by email
+            var user = _context.Users.Include(u => u.Role).FirstOrDefault(u => u.Email == email);
+
+            // Check if user exists and password is correct
+            if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.Password))
+            {
+                ViewBag.Error = "Invalid email or password.";
+                return View();
+            }
+
+            // Check if email is verified
+            if (!user.IsEmailVerified)
+            {
+                ViewBag.Error = "Please verify your email before logging in.";
+                return View();
+            }
+            return await SignInUserAsync(user, isPersistent: rememberMe);
+        }
+
         public IActionResult Register()
         {
             return View();
+        }
+
+        private async Task<IActionResult> SignInUserAsync(User user, bool isPersistent = false, bool removeSession = false)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.Name),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Role, user.Role?.RoleName ?? "Member"),
+                new Claim("EmailVerified", "true")
+            };
+
+            var claimsIdentity = new ClaimsIdentity(claims, "Cookies");
+            var authProperties = new AuthenticationProperties
+            {
+                IsPersistent = isPersistent
+            };
+
+            await HttpContext.SignInAsync("Cookies", new ClaimsPrincipal(claimsIdentity), authProperties);
+            
+            if (removeSession)
+            {
+                HttpContext.Session.Remove("PendingUserId");
+            }
+            
+            return RedirectToAction("Index", "Home");
         }
 
         // POST: Account/Register
@@ -107,31 +163,10 @@ namespace mvc.Controllers
             if (user != null)
             {
                 user.IsEmailVerified = true;
-                user.UpdatedAt = DateTime.Now;
+                user.UpdatedAt = DateTime.UtcNow;
                 _context.SaveChanges();
-
-                // Log the user in by creating authentication cookie
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(ClaimTypes.Name, user.Name),
-                    new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.Role, user.Role?.RoleName ?? "Member"),
-                    new Claim("EmailVerified", "true")
-                };
-
-                var claimsIdentity = new ClaimsIdentity(claims, "Cookies");
-                var authProperties = new AuthenticationProperties
-                {
-                    IsPersistent = false
-                };
-
-                await HttpContext.SignInAsync("Cookies", new ClaimsPrincipal(claimsIdentity), authProperties);
-                HttpContext.Session.Remove("PendingUserId");
-                
-                return RedirectToAction("Index", "Home");
+                return await SignInUserAsync(user, isPersistent: false, removeSession: true);
             }
-
             return RedirectToAction("Register");
         }
 
