@@ -16,7 +16,7 @@
         </div>
         <div class="navbar-nav ms-3">
             @if (User.Identity?.IsAuthenticated == true) {
-                <span class="nav-link text-white p-2">Hello, @(User.Identity?.Name ?? "User")</span>
+                <span class="nav-link text-white p-2">Hello, @(User.Identity?.Name ?? "User") - Role: @(User.IsInRole("Admin") ? "Admin" : "Member")</span>
                 <a class="nav-link text-white px-4 text-decoration-none btn btn-outline-dark border-0 fw-semibold fs-6" asp-controller="Account" asp-action="Logout">Logout</a>
             } 
             else 
@@ -30,5 +30,6 @@
         @RenderBody()
     </main>
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/js/_layout-script.js"></script>
 </body>
 </html>
