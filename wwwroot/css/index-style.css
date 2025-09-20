@@ -2,7 +2,7 @@ section {
     background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(../images/homepage1.jpg);
     background-position: center center;
     background-size: cover;
-    height: 66vh;
+    height: 500px;
     width: 100vw;
 }
 

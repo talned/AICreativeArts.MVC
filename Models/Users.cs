@@ -11,7 +11,7 @@ namespace mvc.Models {
         public DateTime UpdatedAt { get; set; }
         
         // Navigation property to Role
-        public required Role Role { get; set; }
+        public Role? Role { get; set; }
     }
 
     public class Role

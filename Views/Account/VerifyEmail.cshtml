@@ -1,3 +1,11 @@
 @{
     ViewData["Title"] = "Verify Email";
 }
+
+<h1>Verify Your Email</h1>
+
+<form method="post" asp-action="VerifyEmailConfirm">
+    <div>
+        <input type="submit" value="Verify email: @ViewBag.UserEmail">
+    </div>
+</form>
