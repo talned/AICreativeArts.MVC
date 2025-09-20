@@ -3,6 +3,7 @@
 <head>
     <title>@ViewData["Title"] - Creative AI</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    @await RenderSectionAsync("Styles", required: false)
 </head>
 <body class="bg-dark text-white">
     <nav class="navbar navbar-expand-lg bg-black">
@@ -14,7 +15,7 @@
             </div>
         </div>
     </nav>
-    <main class="container mt-4"> 
+    <main class="container mx-0 px-0"> 
         @RenderBody()
     </main>
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
